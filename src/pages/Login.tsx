@@ -26,11 +26,13 @@ export default function Login() {
       setLoading(true);
 
       const res = await axios.post(
-        "http://localhost:7777/api/auth/login",
+        "http://localhost:7777/api/user/login",
         { email, password }
       );
 
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("role", res.data.user.role);  // 👈 add this
+      localStorage.setItem("name", res.data.user.name);  // 👈 add this
       toast.success("Logged in successfully 🚀");
       navigate("/dashboard");
 

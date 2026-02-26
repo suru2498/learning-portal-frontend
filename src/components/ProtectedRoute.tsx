@@ -1,16 +1,22 @@
+import type { JSX } from "react";
 import { Navigate } from "react-router-dom";
-import type { ReactNode } from "react";
 
-interface ProtectedRouteProps {
-  children: ReactNode;
+interface Props {
+  children: JSX.Element;
+  adminOnly?: boolean;
 }
 
-export default function ProtectedRoute({ children }: ProtectedRouteProps) {
+export default function ProtectedRoute({ children, adminOnly }: Props) {
   const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
 
   if (!token) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/" />;
   }
 
-  return <>{children}</>;
+  if (adminOnly && role !== "ADMIN") {
+    return <Navigate to="/dashboard" />;
+  }
+
+  return children;
 }

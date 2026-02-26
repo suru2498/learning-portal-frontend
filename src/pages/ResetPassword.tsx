@@ -14,7 +14,7 @@ export default function ResetPassword() {
   }, [searchParams]);
 
   const handleReset = async () => {
-    const res = await fetch("http://localhost:7777/api/auth/reset-password", {
+    const res = await fetch("http://localhost:7777/api/user/reset-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token, newPassword: password }),

@@ -31,7 +31,7 @@ export default function Register() {
       setLoading(true);
 
       await axios.post(
-        "http://localhost:7777/api/auth/register",
+        "http://localhost:7777/api/user/register",
         { name, email, password }
       );
 
