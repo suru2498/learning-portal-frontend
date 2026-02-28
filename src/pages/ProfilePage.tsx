@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 interface User {
@@ -17,9 +17,11 @@ export default function ProfilePage() {
   });
 
   const token = localStorage.getItem("token");
+  const hasFetched = useRef(false);
 
   useEffect(() => {
-    if (!token) return;
+    if (!token || hasFetched.current) return;
+    hasFetched.current = true;
 
     axios
       .get(`${import.meta.env.VITE_API_URL}/api/user/me`, {

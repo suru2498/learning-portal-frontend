@@ -2,42 +2,66 @@ import { useState } from "react";
 import axios from "axios";
 
 interface Props {
-  categorySlug: string;
+  categorySlug?: string;
+  parentSlug?: string;
   onClose: () => void;
   refresh: () => void;
 }
 
-export default function AddTopicModal({categorySlug, onClose, refresh,}: Props) {
+export default function AddTopicModal({
+  categorySlug,
+  parentSlug,
+  onClose,
+  refresh,
+}: Props) {
   const [title, setTitle] = useState("");
+  const [slug, setSlug] = useState("");
+
+  const token = localStorage.getItem("token");
 
   const handleSubmit = async () => {
-    if (!title.trim()) return;
+    if (!title.trim() || !slug.trim()) return;
 
-    await axios.post(`${import.meta.env.VITE_API_URL}/api/topics`,{ title, categorySlug },
+    await axios.post(
+      `${import.meta.env.VITE_API_URL}/api/topics`,
+      {
+        title: title.trim(),
+        slug: slug.trim().toLowerCase(),
+        categorySlug: categorySlug || null,
+        parentSlug: parentSlug || null,
+      },
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
+
     refresh();
     onClose();
   };
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
+      <div className="bg-white p-8 rounded-xl w-96 shadow-xl">
 
-      <div className="bg-white dark:bg-slate-800 p-8 rounded-xl w-96">
+        <h2 className="text-xl font-bold mb-6">Add Topic</h2>
 
-        <h2 className="text-xl font-bold mb-6">
-          Add Topic
-        </h2>
-
+        {/* Title */}
         <input
           type="text"
-          placeholder="Topic name (e.g. Arrays)"
+          placeholder="Title (e.g. Content Delivery Network)"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          className="w-full mb-4 px-4 py-2 border rounded-lg"
+        />
+
+        {/* Slug */}
+        <input
+          type="text"
+          placeholder="Slug (e.g. cdn)"
+          value={slug}
+          onChange={(e) => setSlug(e.target.value)}
           className="w-full mb-6 px-4 py-2 border rounded-lg"
         />
 
@@ -50,9 +74,7 @@ export default function AddTopicModal({categorySlug, onClose, refresh,}: Props) 
             Add
           </button>
         </div>
-
       </div>
-
     </div>
   );
 }

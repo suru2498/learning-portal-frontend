@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -18,7 +18,7 @@ interface Topic {
   problems: Problem[];
 }
 
-export default function TopicPage() {
+export default function DSAPage() {
   const { topicSlug } = useParams<{
     categorySlug: string;
     topicSlug: string;
@@ -50,9 +50,12 @@ export default function TopicPage() {
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
   const isAdmin = role?.toLowerCase() === "admin";
-
+  const hasFetched = useRef(false);
   useEffect(() => {
-    if (topicSlug) fetchTopic();
+    if (!topicSlug || hasFetched.current) return;
+
+    hasFetched.current = true;
+    fetchTopic();
   }, [topicSlug]);
 
   const fetchTopic = async () => {
@@ -446,8 +449,8 @@ export default function TopicPage() {
         {/* Collapsible Content */}
         <div
           className={`transition-all duration-300 ease-in-out ${showProblems
-              ? "max-h-[3000px] opacity-100 px-6 pb-6"
-              : "max-h-0 opacity-0 overflow-hidden"
+            ? "max-h-[3000px] opacity-100 px-6 pb-6"
+            : "max-h-0 opacity-0 overflow-hidden"
             }`}
         >
 
@@ -460,8 +463,8 @@ export default function TopicPage() {
               <div
                 key={problem.id}
                 className={`p-5 border rounded-xl mb-4 ${problem.isSolved
-                    ? "bg-green-50 border-green-400"
-                    : "bg-white dark:bg-slate-900"
+                  ? "bg-green-50 border-green-400"
+                  : "bg-white dark:bg-slate-900"
                   }`}
               >
                 <div className="flex justify-between items-center mb-2">
@@ -473,8 +476,8 @@ export default function TopicPage() {
                         handleToggleSolved(problem.id, problem.isSolved)
                       }
                       className={`px-3 py-1 rounded text-sm ${problem.isSolved
-                          ? "bg-gray-300"
-                          : "bg-green-500 text-white"
+                        ? "bg-gray-300"
+                        : "bg-green-500 text-white"
                         }`}
                     >
                       {problem.isSolved

@@ -2,14 +2,17 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
-import TopicPage from "./pages/TopicPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import { Toaster } from "react-hot-toast";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ProfilePage from "./pages/ProfilePage";
 import AppLayout from "./layouts/AppLayout";
-import CategoryPage from "./pages/CategoryPage";
+import DSACategoryPage from "./pages/DSATopicPage";
+import DSAPage from "./pages/DSAPage";
+import SystemDesignPage from "./pages/SystemDesignPage";
+import SystemDesignTopicPage from "./pages/SystemDesignTopicPage";
+import HLDTheoryPage from "./pages/HLDTheoryPage";
 
 function App() {
   return (
@@ -34,9 +37,19 @@ function App() {
         >
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/category/:categorySlug" element={<CategoryPage />} />
-          <Route path="/category/:categorySlug/:topicSlug" element={<TopicPage />} />
+          {/* DSA Routes */}
+          <Route path="/dsa" element={<DSACategoryPage />} />
+          <Route path="/dsa/:topicSlug" element={<DSAPage />} />
+
+          {/* System Design Routes */}
+          <Route path="/system-design" element={<SystemDesignPage />} />
+          <Route path="/system-design/:topicSlug" element={<SystemDesignTopicPage />} />
         </Route>
+
+        <Route 
+  path="/system-design/hld/:topicSlug" 
+  element={<HLDTheoryPage />} 
+/>
 
       </Routes>
     </BrowserRouter>
