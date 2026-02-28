@@ -22,7 +22,7 @@ export default function CategoryPage() {
   const fetchTopics = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:7777/api/topics/category/${categorySlug}`
+        `${import.meta.env.VITE_API_URL}/api/topics/category/${categorySlug}`
       );
       setTopics(res.data);
     } catch (error) {

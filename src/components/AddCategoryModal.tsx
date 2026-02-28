@@ -14,7 +14,7 @@ export default function AddCategoryModal({ onClose, refresh }: Props) {
     if (!name.trim()) return;
 
     await axios.post(
-      "http://localhost:7777/api/categories",
+      `${import.meta.env.VITE_API_URL}/api/categories`,
       { name },
       {
         headers: {

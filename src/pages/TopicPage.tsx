@@ -31,6 +31,9 @@ export default function TopicPage() {
   const [showForm, setShowForm] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showAddProblem, setShowAddProblem] = useState(false);
+  const [showConcept, setShowConcept] = useState(true);
+  const [showProblems, setShowProblems] = useState(true);
 
   const [newProblem, setNewProblem] = useState({
     title: "",
@@ -57,7 +60,7 @@ export default function TopicPage() {
       setLoading(true);
 
       const res = await axios.get(
-        `http://localhost:7777/api/topics/topic/${topicSlug}`,
+        `${import.meta.env.VITE_API_URL}/api/topics/topic/${topicSlug}`,
         {
           headers: token
             ? { Authorization: `Bearer ${token}` }
@@ -85,12 +88,12 @@ export default function TopicPage() {
     try {
       if (isSolved) {
         await axios.delete(
-          `http://localhost:7777/api/topics/problem/${problemId}/solve`,
+          `${import.meta.env.VITE_API_URL}/api/topics/problem/${problemId}/solve`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
       } else {
         await axios.post(
-          `http://localhost:7777/api/topics/problem/${problemId}/solve`,
+          `${import.meta.env.VITE_API_URL}/api/topics/problem/${problemId}/solve`,
           {},
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -107,7 +110,7 @@ export default function TopicPage() {
 
     try {
       await axios.post(
-        "http://localhost:7777/api/topics/problem",
+        `${import.meta.env.VITE_API_URL}/api/topics/problem`,
         {
           ...newProblem,
           topic_id: topic.id
@@ -133,7 +136,7 @@ export default function TopicPage() {
 
     try {
       await axios.put(
-        `http://localhost:7777/api/topics/${topic.id}`,
+        `${import.meta.env.VITE_API_URL}/api/topics/${topic.id}`,
         editTopicData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -146,9 +149,11 @@ export default function TopicPage() {
   };
 
   const handleDeleteTopic = async () => {
+    if (!topic) return;
+
     try {
       await axios.delete(
-        `http://localhost:7777/api/topics/${topic.id}`, // make sure topic.id exists
+        `${import.meta.env.VITE_API_URL}/api/topics/${topic.id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -187,14 +192,14 @@ export default function TopicPage() {
   ).length;
 
   return (
-    <div className="p-10 w-full">
+    <div className="lex justify-between items-center mb-8">
 
       <h1 className="text-3xl font-bold mb-4 capitalize">
         {topic.title}
       </h1>
 
       {isAdmin && (
-        <div className="flex gap-4 mb-6">
+        <div className="flex justify-end gap-4 mb-8">
           <button
             onClick={() => setEditMode(!editMode)}
             className="bg-yellow-600 text-white px-4 py-2 rounded mb-6"
@@ -210,14 +215,95 @@ export default function TopicPage() {
           </button>
 
           <button
-            onClick={() => setShowForm(!showForm)}
-            className="bg-blue-600 text-white px-4 py-2 rounded mb-6"
+            onClick={() => setShowAddProblem((prev) => !prev)}
+            className={`px-4 py-2 rounded-lg transition ${showAddProblem
+              ? "bg-blue-600 text-white px-4 py-2 rounded mb-6"
+              : "bg-blue-600 text-white px-4 py-2 rounded mb-6"
+              }`}
           >
-            + Add Problem
+            {showAddProblem ? "Cancel" : "+ Add Problem"}
           </button>
 
         </div>
       )}
+
+
+      {showAddProblem && (
+        <div className="mt-6 mb-8 p-6 bg-white dark:bg-slate-800 border rounded-xl shadow-sm space-y-4">
+
+          <input
+            type="text"
+            placeholder="Problem Title"
+            value={newProblem.title}
+            onChange={(e) =>
+              setNewProblem({ ...newProblem, title: e.target.value })
+            }
+            className="w-full p-3 border rounded-lg dark:bg-slate-900"
+          />
+
+          <select
+            value={newProblem.difficulty}
+            onChange={(e) =>
+              setNewProblem({
+                ...newProblem,
+                difficulty: e.target.value as "Easy" | "Medium" | "Hard",
+              })
+            }
+            className="w-full p-3 border rounded-lg dark:bg-slate-900"
+          >
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+          </select>
+
+          <input
+            type="text"
+            placeholder="LeetCode Link"
+            value={newProblem.leetcode_link}
+            onChange={(e) =>
+              setNewProblem({
+                ...newProblem,
+                leetcode_link: e.target.value,
+              })
+            }
+            className="w-full p-3 border rounded-lg dark:bg-slate-900"
+          />
+
+          <button
+            onClick={handleAddProblem}
+            className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition"
+          >
+            Save Problem
+          </button>
+
+        </div>
+      )}
+
+      <div className="mb-8">
+        <div className="flex justify-between text-sm mb-1">
+          <span>Progress</span>
+          <span>{progress}%</span>
+        </div>
+
+        <div className="w-full bg-gray-200 rounded-full h-3">
+          <div
+            className="bg-green-500 h-3 rounded-full transition-all"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+
+        <div className="mt-4 flex gap-6 text-sm">
+          <span className="text-green-600">
+            Easy: {easySolved}/{easyTotal}
+          </span>
+          <span className="text-yellow-600">
+            Medium: {mediumSolved}/{mediumTotal}
+          </span>
+          <span className="text-red-600">
+            Hard: {hardSolved}/{hardTotal}
+          </span>
+        </div>
+      </div>
 
       {editMode ? (
         <div className="mb-8 space-y-4">
@@ -254,42 +340,42 @@ export default function TopicPage() {
         </div>
       ) : (
         topic.summary && (
-          <div className="mb-8 p-6 border rounded-xl bg-gray-50">
-            <h3 className="text-lg font-semibold mb-4">
-              Concept Overview
-            </h3>
-            <div className="whitespace-pre-line">
-              {topic.summary}
+          <div className="mb-8 bg-white dark:bg-slate-800 rounded-2xl border dark:border-slate-700 shadow-sm overflow-hidden">
+
+            {/* Header */}
+            <button
+              onClick={() => setShowConcept((prev) => !prev)}
+              className="w-full flex justify-between items-center p-6 text-left"
+            >
+              <h3 className="text-lg font-semibold">
+                Concept Overview
+              </h3>
+
+              <span
+                className={`transition-transform duration-300 ${showConcept ? "rotate-180" : ""
+                  }`}
+              >
+                ▼
+              </span>
+            </button>
+
+            {/* Collapsible Content */}
+            <div
+              className={`transition-all duration-300 ease-in-out ${showConcept
+                ? "max-h-[1000px] opacity-100 px-6 pb-6"
+                : "max-h-0 opacity-0 overflow-hidden"
+                }`}
+            >
+              <div className="whitespace-pre-line text-gray-700 dark:text-gray-300">
+                {topic.summary}
+              </div>
             </div>
+
           </div>
         )
       )}
 
-      <div className="mb-8">
-        <div className="flex justify-between text-sm mb-1">
-          <span>Progress</span>
-          <span>{progress}%</span>
-        </div>
 
-        <div className="w-full bg-gray-200 rounded-full h-3">
-          <div
-            className="bg-green-500 h-3 rounded-full transition-all"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-
-        <div className="mt-4 flex gap-6 text-sm">
-          <span className="text-green-600">
-            Easy: {easySolved}/{easyTotal}
-          </span>
-          <span className="text-yellow-600">
-            Medium: {mediumSolved}/{mediumTotal}
-          </span>
-          <span className="text-red-600">
-            Hard: {hardSolved}/{hardTotal}
-          </span>
-        </div>
-      </div>
 
       {isAdmin && showForm && (
         <div className="mb-8 space-y-4">
@@ -338,51 +424,85 @@ export default function TopicPage() {
         </div>
       )}
 
-      <h2 className="text-xl font-semibold mb-4">Problems</h2>
+      <div className="mb-10 bg-white dark:bg-slate-800 rounded-2xl border dark:border-slate-700 shadow-sm overflow-hidden">
 
-      {topic.problems.map(problem => (
+        {/* Header */}
+        <button
+          onClick={() => setShowProblems((prev) => !prev)}
+          className="w-full flex justify-between items-center p-6 text-left"
+        >
+          <h3 className="text-lg font-semibold">
+            Problems
+          </h3>
+
+          <span
+            className={`transition-transform duration-300 ${showProblems ? "rotate-180" : ""
+              }`}
+          >
+            ▼
+          </span>
+        </button>
+
+        {/* Collapsible Content */}
         <div
-          key={problem.id}
-          className={`p-5 border rounded-xl mb-4 ${problem.isSolved
-            ? "bg-green-50 border-green-400"
-            : "bg-white"
+          className={`transition-all duration-300 ease-in-out ${showProblems
+              ? "max-h-[3000px] opacity-100 px-6 pb-6"
+              : "max-h-0 opacity-0 overflow-hidden"
             }`}
         >
-          <div className="flex justify-between items-center mb-2">
-            <h3>{problem.title}</h3>
 
-            <div className="flex gap-3 items-center">
-              <button
-                onClick={() =>
-                  handleToggleSolved(problem.id, problem.isSolved)
-                }
-                className={`px-3 py-1 rounded text-sm ${problem.isSolved
-                  ? "bg-gray-300"
-                  : "bg-green-500 text-white"
+          {topic.problems.length === 0 ? (
+            <p className="text-gray-500 dark:text-gray-400">
+              No problems added yet.
+            </p>
+          ) : (
+            topic.problems.map(problem => (
+              <div
+                key={problem.id}
+                className={`p-5 border rounded-xl mb-4 ${problem.isSolved
+                    ? "bg-green-50 border-green-400"
+                    : "bg-white dark:bg-slate-900"
                   }`}
               >
-                {problem.isSolved
-                  ? "Mark Unsolved"
-                  : "Mark Solved"}
-              </button>
+                <div className="flex justify-between items-center mb-2">
+                  <h3>{problem.title}</h3>
 
-              <span className="text-sm">
-                {problem.difficulty}
-              </span>
-            </div>
-          </div>
+                  <div className="flex gap-3 items-center">
+                    <button
+                      onClick={() =>
+                        handleToggleSolved(problem.id, problem.isSolved)
+                      }
+                      className={`px-3 py-1 rounded text-sm ${problem.isSolved
+                          ? "bg-gray-300"
+                          : "bg-green-500 text-white"
+                        }`}
+                    >
+                      {problem.isSolved
+                        ? "Mark Unsolved"
+                        : "Mark Solved"}
+                    </button>
 
-          {problem.leetcode_link && (
-            <a
-              href={problem.leetcode_link}
-              target="_blank"
-              className="text-blue-600 text-sm"
-            >
-              Solve on LeetCode →
-            </a>
+                    <span className="text-sm">
+                      {problem.difficulty}
+                    </span>
+                  </div>
+                </div>
+
+                {problem.leetcode_link && (
+                  <a
+                    href={problem.leetcode_link}
+                    target="_blank"
+                    className="text-blue-600 text-sm"
+                  >
+                    Solve on LeetCode →
+                  </a>
+                )}
+              </div>
+            ))
           )}
+
         </div>
-      ))}
+      </div>
 
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">

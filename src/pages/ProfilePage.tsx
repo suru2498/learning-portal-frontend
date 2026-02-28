@@ -22,7 +22,7 @@ export default function ProfilePage() {
     if (!token) return;
 
     axios
-      .get("http://localhost:7777/api/user/me", {
+      .get(`${import.meta.env.VITE_API_URL}/api/user/me`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -38,7 +38,7 @@ export default function ProfilePage() {
   const handleSave = async () => {
     try {
       const res = await axios.put(
-        "http://localhost:7777/api/user/me",
+        `${import.meta.env.VITE_API_URL}/api/user/me`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },

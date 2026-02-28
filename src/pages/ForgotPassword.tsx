@@ -4,7 +4,7 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState("");
 
   const handleSubmit = async () => {
-    const res = await fetch("http://localhost:7777/api/user/forgot-password", {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/user/forgot-password`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),

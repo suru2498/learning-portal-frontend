@@ -13,7 +13,7 @@ export default function AddTopicModal({categorySlug, onClose, refresh,}: Props) 
   const handleSubmit = async () => {
     if (!title.trim()) return;
 
-    await axios.post("http://localhost:7777/api/topics",{ title, categorySlug },
+    await axios.post(`${import.meta.env.VITE_API_URL}/api/topics`,{ title, categorySlug },
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
