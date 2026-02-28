@@ -12,6 +12,7 @@ interface Topic {
 export default function CategoryPage() {
   const navigate = useNavigate();
   const { categorySlug } = useParams<{ categorySlug: string }>();
+  const role = localStorage.getItem("role");
 
   const [topics, setTopics] = useState<Topic[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -44,12 +45,14 @@ export default function CategoryPage() {
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Topics</h1>
 
-        <button
-          onClick={() => setShowModal(true)}   // ✅ CORRECT SYNTAX
-          className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700"
-        >
-          + Add Topic
-        </button>
+        {role === "ADMIN" && (
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700"
+          >
+            + Add Topic
+          </button>
+        )}
       </div>
 
       {/* Topics List */}
@@ -61,14 +64,14 @@ export default function CategoryPage() {
         <ul className="space-y-4">
           {topics.map((topic) => (
             <li
-  key={topic.id}
-  onClick={() =>
-    navigate(`/category/${categorySlug}/${topic.slug}`)
-  }
-  className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer"
->
-  {topic.title}
-</li>
+              key={topic.id}
+              onClick={() =>
+                navigate(`/category/${categorySlug}/${topic.slug}`)
+              }
+              className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer"
+            >
+              {topic.title}
+            </li>
           ))}
         </ul>
       )}

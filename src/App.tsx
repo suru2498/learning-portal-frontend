@@ -7,7 +7,6 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import { Toaster } from "react-hot-toast";
 import ProtectedRoute from "./components/ProtectedRoute";
-import AdminPage from "./pages/AdminPage";
 import ProfilePage from "./pages/ProfilePage";
 import AppLayout from "./layouts/AppLayout";
 import CategoryPage from "./pages/CategoryPage";
@@ -35,7 +34,6 @@ function App() {
         >
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/admin" element={<AdminPage />} />
           <Route path="/category/:categorySlug" element={<CategoryPage />} />
           <Route path="/category/:categorySlug/:topicSlug" element={<TopicPage />} />
         </Route>

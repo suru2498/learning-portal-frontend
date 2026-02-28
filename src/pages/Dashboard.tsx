@@ -12,7 +12,6 @@ interface Category {
 export default function Dashboard() {
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
-
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -42,63 +41,72 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen p-10 bg-gray-50 dark:bg-slate-900">
+  <div className="max-w-6xl flex flex-col min-h-[70vh]">
 
-      <div className="max-w-6xl mx-auto">
-
-        {/* Header */}
-        <div className="flex justify-between items-center mb-10">
-          <h1 className="text-3xl font-bold">
-            Learning Dashboard 🚀
-          </h1>
-
-          {role === "ADMIN" && (
-            <button
-              onClick={() => setShowModal(true)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition"
-            >
-              + Add Category
-            </button>
-          )}
-        </div>
-
-        {/* Categories Grid */}
-        {categories.length === 0 ? (
-          <p className="text-gray-500">
-            No categories available.
-          </p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {categories.map((category) => (
-              <div
-                key={category.id}
-                onClick={() =>
-                  navigate(`/category/${category.slug}`)
-                }
-                className="bg-white dark:bg-slate-800 border p-6 rounded-xl cursor-pointer hover:shadow-lg hover:scale-[1.02] transition"
-              >
-                <h3 className="font-medium text-lg capitalize">
-                  {category.name}
-                </h3>
-
-                <p className="text-sm text-gray-500 mt-2">
-                  View topics →
-                </p>
-              </div>
-            ))}
-          </div>
-        )}
-
-      </div>
-
-      {/* Add Category Modal */}
-      {showModal && (
-        <AddCategoryModal
-          onClose={() => setShowModal(false)}
-          refresh={fetchCategories}
-        />
-      )}
-
+    {/* Header */}
+    <div className="mb-10">
+      <h1 className="text-3xl font-bold">
+        Learning Dashboard 🚀
+      </h1>
     </div>
-  );
+
+    {/* Categories Grid */}
+    {categories.length === 0 ? (
+      <p className="text-gray-500">
+        No categories available.
+      </p>
+    ) : (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {categories.map((category) => (
+          <div
+            key={category.id}
+            onClick={() =>
+              navigate(`/category/${category.slug}`)
+            }
+            className="bg-white dark:bg-slate-800 border p-6 rounded-xl cursor-pointer hover:shadow-lg hover:scale-[1.02] transition"
+          >
+            <h3 className="font-medium text-lg capitalize">
+              {category.name}
+            </h3>
+
+            <p className="text-sm text-gray-500 mt-2">
+              View topics →
+            </p>
+          </div>
+        ))}
+      </div>
+    )}
+
+    {/* Spacer pushes button down */}
+    <div className="flex-grow" />
+
+    {/* Add Category Button Bottom */}
+    {role === "ADMIN" && (
+  <button
+    onClick={() => setShowModal(true)}
+    className="
+      fixed bottom-8 right-8
+      bg-blue-600 hover:bg-blue-700
+      text-white
+      px-6 py-3
+      rounded-full
+      shadow-lg
+      hover:shadow-xl
+      transition
+      z-50
+    "
+  >
+    + Add Category
+  </button>
+)}
+
+    {/* Modal */}
+    {showModal && (
+      <AddCategoryModal
+        onClose={() => setShowModal(false)}
+        refresh={fetchCategories}
+      />
+    )}
+  </div>
+);;
 }

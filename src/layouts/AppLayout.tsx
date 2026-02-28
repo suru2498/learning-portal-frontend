@@ -45,7 +45,7 @@ export default function AppLayout() {
 
         {/* Logo + User */}
         <div className="mb-10">
-          <h1 className="text-xl font-bold text-blue-600">
+          <h1 onClick={() => navigate("/dashboard")} className="text-xl font-bold text-blue-600">
             DSA Portal
           </h1>
 
@@ -112,7 +112,7 @@ export default function AppLayout() {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-8">
+        <main className="flex-1 bg-gray-50 dark:bg-slate-900 px-10 py-8">
           <Outlet />
         </main>
 

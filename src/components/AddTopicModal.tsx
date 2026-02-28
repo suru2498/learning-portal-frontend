@@ -7,26 +7,19 @@ interface Props {
   refresh: () => void;
 }
 
-export default function AddTopicModal({
-  categorySlug,
-  onClose,
-  refresh,
-}: Props) {
+export default function AddTopicModal({categorySlug, onClose, refresh,}: Props) {
   const [title, setTitle] = useState("");
 
   const handleSubmit = async () => {
     if (!title.trim()) return;
 
-    await axios.post(
-      "http://localhost:7777/api/topics",
-      { title, categorySlug },
+    await axios.post("http://localhost:7777/api/topics",{ title, categorySlug },
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       }
     );
-
     refresh();
     onClose();
   };
