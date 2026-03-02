@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AddTopicModal from "../components/AddTopicModal";
+import { motion } from "framer-motion";
 
 interface Topic {
   id: number;
@@ -16,7 +17,6 @@ export default function DSACategoryPage() {
 
   const navigate = useNavigate();
   const hasFetched = useRef(false);
-
   const role = localStorage.getItem("role");
 
   useEffect(() => {
@@ -28,22 +28,26 @@ export default function DSACategoryPage() {
   const fetchTopics = async () => {
     try {
       setLoading(true);
-
       const res = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/topics/dsa`
       );
-
       setTopics(res.data);
     } catch (error) {
-      console.error("Error fetching DSA topics:", error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="p-10">
-
+    <motion.div
+      key="dsa-page"
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      transition={{ duration: 0.3 }}
+      className="p-10"
+    >
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">DSA Topics</h1>
@@ -77,7 +81,6 @@ export default function DSACategoryPage() {
         </div>
       )}
 
-      {/* Add Topic Modal */}
       {showModal && (
         <AddTopicModal
           categorySlug="dsa"
@@ -85,6 +88,6 @@ export default function DSACategoryPage() {
           refresh={fetchTopics}
         />
       )}
-    </div>
+    </motion.div>
   );
 }

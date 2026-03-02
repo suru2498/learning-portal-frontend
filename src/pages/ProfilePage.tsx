@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 interface User {
   name: string;
@@ -61,14 +62,18 @@ export default function ProfilePage() {
     : "N/A";
 
   return (
-    <div className="max-w-4xl">
-
+    <motion.div
+      key="profile-page"
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      transition={{ duration: 0.3 }}
+      className="w-full"
+    >
       {/* Header */}
       <div className="flex justify-between items-center mb-10">
         <div>
-          <h1 className="text-3xl font-bold">
-            Profile
-          </h1>
+          <h1 className="text-3xl font-bold">Profile</h1>
           <p className="text-gray-500 mt-1">
             Manage your account details
           </p>
@@ -89,32 +94,23 @@ export default function ProfilePage() {
 
         {/* Top Section */}
         <div className="flex items-center justify-between mb-10">
-
           <div>
-            <h2 className="text-xl font-semibold">
-              {user.name}
-            </h2>
-            <p className="text-gray-500 text-sm">
-              {user.email}
-            </p>
+            <h2 className="text-xl font-semibold">{user.name}</h2>
+            <p className="text-gray-500 text-sm">{user.email}</p>
           </div>
 
           <span className="px-4 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-700">
             {user.role}
           </span>
-
         </div>
 
-        {/* Divider */}
         <div className="border-t dark:border-slate-700 mb-8" />
 
         {/* Details Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-          {/* Name */}
           <div>
             <p className="text-sm text-gray-500 mb-1">Full Name</p>
-
             {editMode ? (
               <input
                 type="text"
@@ -129,10 +125,8 @@ export default function ProfilePage() {
             )}
           </div>
 
-          {/* Email */}
           <div>
             <p className="text-sm text-gray-500 mb-1">Email Address</p>
-
             {editMode ? (
               <input
                 type="email"
@@ -147,13 +141,11 @@ export default function ProfilePage() {
             )}
           </div>
 
-          {/* Member Since */}
           <div>
             <p className="text-sm text-gray-500 mb-1">Member Since</p>
             <p className="font-medium">{memberSince}</p>
           </div>
 
-          {/* Role (read-only) */}
           <div>
             <p className="text-sm text-gray-500 mb-1">Role</p>
             <p className="font-medium">{user.role}</p>
@@ -161,7 +153,6 @@ export default function ProfilePage() {
 
         </div>
 
-        {/* Buttons */}
         {editMode && (
           <div className="flex gap-4 mt-10">
             <button
@@ -181,6 +172,6 @@ export default function ProfilePage() {
         )}
 
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -1,7 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import AddTopicModal from "../components/AddTopicModal";
+import { motion } from "framer-motion";
 
 interface Topic {
   id: number;
@@ -10,30 +11,31 @@ interface Topic {
 }
 
 export default function SystemDesignTopicPage() {
-  const { topicSlug } = useParams();
+  
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
 
   const [children, setChildren] = useState<Topic[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const hasFetched = useRef(false);
+  const { type } = useParams();
   
 
   useEffect(() => {
-    if (hasFetched.current) return;
-    hasFetched.current = true;
-    fetchChildren();
-  }, [topicSlug]);
+  if (!type) return;
+
+  // 🔥 CLEAR OLD DATA FIRST
+  setChildren([]);
+  setLoading(true);
+
+  fetchChildren();
+}, [type]);
 
   const fetchChildren = async () => {
     try {
-      setLoading(true);
-
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/topics/children/${topicSlug}`
+        `${import.meta.env.VITE_API_URL}/api/topics/children/${type}`
       );
-
       setChildren(res.data);
     } catch (error) {
       console.error("Error fetching children:", error);
@@ -43,12 +45,19 @@ export default function SystemDesignTopicPage() {
   };
 
   return (
-    <div className="p-10">
+    <motion.div
+  key={type} // 🔥 important for re-triggering animation
+  initial={{ opacity: 0, x: 20 }}
+  animate={{ opacity: 1, x: 0 }}
+  exit={{ opacity: 0, x: -20 }}
+  transition={{ duration: 0.3 }}
+  className="p-10"
+>
 
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold capitalize">
-          {topicSlug}
+          {type}
         </h1>
 
         {role === "ADMIN" && (
@@ -67,13 +76,25 @@ export default function SystemDesignTopicPage() {
       ) : children.length === 0 ? (
         <p>No topics yet.</p>
       ) : (
-        <div className="grid grid-cols-2 gap-6">
+        <motion.div
+  className="grid grid-cols-2 gap-6"
+  initial="hidden"
+  animate="visible"
+  variants={{
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.08,
+      },
+    },
+  }}
+>
           {children.map((child) => (
             <div
               key={child.id}
               onClick={() =>
                 navigate(
-                  `/system-design/${topicSlug}/${child.slug}`
+                  `/system-design/${type}/${child.slug}`
                 )
               }
               className="p-6 border rounded-xl hover:shadow-lg cursor-pointer"
@@ -81,18 +102,18 @@ export default function SystemDesignTopicPage() {
               {child.title}
             </div>
           ))}
-        </div>
+        </motion.div>
       )}
 
       {/* Add Modal */}
       {showModal && (
   <AddTopicModal
-    parentSlug={topicSlug}   // 👈 THIS IS CRITICAL
+    parentSlug={type}   // 👈 THIS IS CRITICAL
     onClose={() => setShowModal(false)}
     refresh={fetchChildren}
   />
 )}
-    </div>
+    </motion.div>
   );
 }
 

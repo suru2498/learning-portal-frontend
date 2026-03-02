@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 interface Problem {
   id: number;
@@ -195,7 +196,14 @@ export default function DSAPage() {
   ).length;
 
   return (
-    <div className="lex justify-between items-center mb-8">
+    <motion.div
+    key={topicSlug}
+    initial={{ opacity: 0, x: 20 }}
+    animate={{ opacity: 1, x: 0 }}
+    exit={{ opacity: 0, x: -20 }}
+    transition={{ duration: 0.3 }}
+    className="p-10"
+  >
 
       <h1 className="text-3xl font-bold mb-4 capitalize">
         {topic.title}
@@ -546,6 +554,6 @@ export default function DSAPage() {
 
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

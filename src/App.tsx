@@ -43,7 +43,7 @@ function App() {
 
           {/* System Design Routes */}
           <Route path="/system-design" element={<SystemDesignPage />} />
-          <Route path="/system-design/:topicSlug" element={<SystemDesignTopicPage />} />
+          <Route path="/system-design/:type" element={<SystemDesignTopicPage />} />
         </Route>
 
         <Route 

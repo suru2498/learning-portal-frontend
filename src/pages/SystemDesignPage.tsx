@@ -1,10 +1,18 @@
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 export default function SystemDesignPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="p-10">
+    <motion.div
+      key="system-design-page"
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      transition={{ duration: 0.3 }}
+      className="p-10"
+    >
       <h1 className="text-3xl font-bold mb-10">
         System Design Topics
       </h1>
@@ -46,6 +54,6 @@ export default function SystemDesignPage() {
         </div>
 
       </div>
-    </div>
+    </motion.div>
   );
 }
