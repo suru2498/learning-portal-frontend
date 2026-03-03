@@ -113,7 +113,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {role === "ADMIN" && (
+      {/* {role === "ADMIN" && (
         <button
           onClick={() => setShowModal(true)}
           className="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700
@@ -122,7 +122,7 @@ export default function Dashboard() {
         >
           + Add Category
         </button>
-      )}
+      )} */}
 
       {showModal && (
         <AddCategoryModal
