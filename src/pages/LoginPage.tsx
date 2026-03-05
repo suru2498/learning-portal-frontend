@@ -2,9 +2,18 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { startAutoLogoutTimer } from "../utils/autoLogout";
 
 type LoginMode = "password" | "emailOtp" | "mobileOtp";
 type OtpStep = "send" | "verify";
+
+interface LoginResponse {
+  token: string;
+  user: {
+    role: string;
+    name: string;
+  };
+}
 
 export default function Login() {
   const navigate = useNavigate();
@@ -35,6 +44,7 @@ export default function Login() {
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.user.role);
       localStorage.setItem("name", res.data.user.name);
+      startAutoLogoutTimer();
 
       toast.success("Logged in successfully 🚀");
       navigate("/dashboard");
@@ -84,6 +94,7 @@ export default function Login() {
       localStorage.setItem("role", res.data.user.role);
       localStorage.setItem("name", res.data.user.name);
 
+      startAutoLogoutTimer();
       toast.success("Logged in 🚀");
       navigate("/dashboard");
 
@@ -144,6 +155,7 @@ export default function Login() {
     localStorage.setItem("role", res.data.user.role);
     localStorage.setItem("name", res.data.user.name);
 
+    startAutoLogoutTimer();
     toast.success("Logged in 🚀");
     navigate("/dashboard");
 

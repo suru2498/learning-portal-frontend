@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-export default function LLDPage() {
+export default function OOPsPage() {
   const { topicSlug } = useParams();
   const [topic, setTopic] = useState<any>(null);
   const [loading, setLoading] = useState(true);

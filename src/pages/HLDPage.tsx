@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-export default function HLDTheoryPage() {
+export default function HLDPage() {
   const { topicSlug } = useParams();
   const [topic, setTopic] = useState<any>(null);
 
@@ -10,12 +10,15 @@ export default function HLDTheoryPage() {
     if (!topicSlug) return;
 
     axios
-      .get(`${import.meta.env.VITE_API_URL}/api/topics/topic/${topicSlug}`, {
+      .get(`${import.meta.env.VITE_API_URL}/api/topics/theory/${topicSlug}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
-      .then((res) => setTopic(res.data))
+      .then((res) => {
+  console.log("API DATA:", res.data);
+  setTopic(res.data);
+})
       .catch(console.error);
   }, [topicSlug]);
 

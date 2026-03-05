@@ -53,6 +53,23 @@ export default function SystemDesignPage() {
           </p>
         </div>
 
+        {/* OOPs Card */}
+        <div
+          onClick={() => navigate("/system-design/oops")}
+          className="bg-white dark:bg-slate-800 
+                     p-10 rounded-2xl 
+                     shadow-md hover:shadow-xl 
+                     border border-gray-200 dark:border-slate-700
+                     cursor-pointer transition duration-300"
+        >
+          <h2 className="text-2xl font-semibold mb-3">
+            OOPs
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400">
+            Object Oriented Programming Concepts.
+          </p>
+        </div>
+
       </div>
     </motion.div>
   );

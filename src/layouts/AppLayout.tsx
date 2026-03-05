@@ -9,13 +9,16 @@ import {
   LogOut,
   ChevronDown,
 } from "lucide-react";
+import { clearLogoutTimer } from "../utils/autoLogout";
 
 export default function AppLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-
   const [collapsed, setCollapsed] = useState(false);
   const [systemDesignOpen, setSystemDesignOpen] = useState(false);
+
+  const name = localStorage.getItem("name");
+  const role = localStorage.getItem("role");
 
   useEffect(() => {
     if (location.pathname.startsWith("/system-design")) {
@@ -24,6 +27,7 @@ export default function AppLayout() {
   }, [location.pathname]);
 
   const handleLogout = () => {
+    clearLogoutTimer();
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     navigate("/");
@@ -35,10 +39,9 @@ export default function AppLayout() {
 
   const menuItemClass = (path: string) => `
     flex items-center gap-3 w-full px-4 py-2 rounded-lg transition-colors duration-200
-    ${
-      isActive(path)
-        ? "bg-blue-100 dark:bg-slate-700 text-blue-600 font-medium"
-        : "text-gray-600 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-slate-700 hover:text-blue-600"
+    ${isActive(path)
+      ? "bg-blue-100 dark:bg-slate-700 text-blue-600 font-medium"
+      : "text-gray-600 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-slate-700 hover:text-blue-600"
     }
   `;
 
@@ -47,9 +50,8 @@ export default function AppLayout() {
 
       {/* Sidebar */}
       <div
-        className={`${
-          collapsed ? "w-20" : "w-64"
-        } bg-white dark:bg-slate-900 border-r dark:border-slate-700 flex flex-col p-4 transition-all duration-300`}
+        className={`${collapsed ? "w-20" : "w-64"
+          } bg-white dark:bg-slate-900 border-r dark:border-slate-700 flex flex-col p-4 transition-all duration-300`}
       >
         {/* Top Section */}
         <div className="flex items-center justify-between mb-8">
@@ -72,8 +74,14 @@ export default function AppLayout() {
 
         {/* User */}
         {!collapsed && (
-          <div className="mb-6 text-gray-500 dark:text-gray-400">
-            Suraj Singh Kanyal
+          <div className="mb-6">
+            <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+              {name}
+            </p>
+
+            <span className="text-xs px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 font-semibold">
+              {role}
+            </span>
           </div>
         )}
 
@@ -127,9 +135,8 @@ export default function AppLayout() {
                   </span>
                   <ChevronDown
                     size={16}
-                    className={`transition-transform duration-200 ${
-                      systemDesignOpen ? "rotate-180" : ""
-                    }`}
+                    className={`transition-transform duration-200 ${systemDesignOpen ? "rotate-180" : ""
+                      }`}
                   />
                 </>
               )}
@@ -150,6 +157,13 @@ export default function AppLayout() {
                   className={menuItemClass("/system-design/lld")}
                 >
                   LLD
+                </button>
+
+                <button
+                  onClick={() => navigate("/system-design/oops")}
+                  className={menuItemClass("/system-design/oops")}
+                >
+                  OOPs
                 </button>
               </div>
             )}

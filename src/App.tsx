@@ -12,10 +12,18 @@ import DSACategoryPage from "./pages/DSATopics";
 import DSAPage from "./pages/DSA";
 import SystemDesignPage from "./pages/SystemDesign";
 import SystemDesignTopicPage from "./pages/SystemDesignTopics";
-import HLDTheoryPage from "./pages/HLDPage";
-import LLDTheoryPage from "./pages/LLDPage";
+import HLDPage from "./pages/HLDPage";
+import LLDPage from "./pages/LLDPage";
+import OOPsPage from "./pages/OOPsPage";
+import { startAutoLogoutTimer } from "./utils/autoLogout";
+import { useEffect } from "react";
 
 function App() {
+
+  useEffect(() => {
+    startAutoLogoutTimer();
+  }, []);
+  
   return (
     <BrowserRouter>
       <Toaster position="top-right" />
@@ -45,14 +53,9 @@ function App() {
           {/* System Design Routes */}
           <Route path="/system-design" element={<SystemDesignPage />} />
           <Route path="/system-design/:type" element={<SystemDesignTopicPage />} />
-          <Route
-          path="/system-design/:type/:topicSlug"
-          element={<HLDTheoryPage />}
-        />
-        <Route
-          path="/system-design/:type/:topicSlug"
-          element={<LLDTheoryPage />}
-        />
+          <Route path="/system-design/hld/:topicSlug" element={<HLDPage />} />
+          <Route path="/system-design/lld/:topicSlug" element={<LLDPage />} />
+          <Route path="/system-design/oops/:topicSlug" element={<OOPsPage />} />
         </Route>
         
 
