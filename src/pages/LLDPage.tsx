@@ -109,16 +109,16 @@ export default function LLDPage() {
 
   if (loading) {
     return (
-      <div className="p-10">
-        <p>Loading...</p>
+      <div className="p-10 text-gray-900 dark:text-gray-100">
+        Loading...
       </div>
     );
   }
 
   if (!topic) {
     return (
-      <div className="p-10">
-        <p>Topic not found.</p>
+      <div className="p-10 text-gray-900 dark:text-gray-100">
+        Topic not found.
       </div>
     );
   }
@@ -129,7 +129,7 @@ export default function LLDPage() {
       {/* Title + Buttons */}
       <div className="flex justify-between items-center mb-8">
 
-        <h1 className="text-4xl font-bold">
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">
           {topic.title}
         </h1>
 
@@ -156,14 +156,14 @@ export default function LLDPage() {
       </div>
 
       {/* Theory Section */}
-      <div className="bg-white p-8 rounded-xl shadow-sm mb-10">
+      <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 p-8 rounded-xl shadow-sm mb-10">
 
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
           📘 Theory
         </h2>
 
         <div
-          className="prose max-w-none"
+          className="prose dark:prose-invert max-w-none"
           dangerouslySetInnerHTML={{ __html: topic.description }}
         />
 
@@ -191,15 +191,15 @@ export default function LLDPage() {
 
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 
-          <div className="bg-white p-6 rounded-xl w-[750px]">
+          <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 p-6 rounded-xl w-[750px] shadow-xl">
 
-            <h2 className="text-xl font-bold mb-4">
+            <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">
               Edit Topic
             </h2>
 
             {/* Title */}
             <input
-              className="w-full border rounded-lg p-2 mb-4"
+              className="w-full border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg p-2 mb-4"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
@@ -207,7 +207,7 @@ export default function LLDPage() {
             {/* Description */}
             <textarea
               rows={8}
-              className="w-full border rounded-lg p-2 mb-4"
+              className="w-full border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg p-2 mb-4"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -215,7 +215,7 @@ export default function LLDPage() {
             {/* Pseudo Code */}
             <textarea
               rows={8}
-              className="w-full border rounded-lg p-2 mb-4 font-mono"
+              className="w-full border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg p-2 mb-4 font-mono"
               value={pseudoCode}
               onChange={(e) => setPseudoCode(e.target.value)}
             />
@@ -224,14 +224,14 @@ export default function LLDPage() {
 
               <button
                 onClick={() => setEditOpen(false)}
-                className="px-4 py-2 border rounded-lg"
+                className="px-4 py-2 border border-gray-300 dark:border-slate-600 text-gray-900 dark:text-gray-100 rounded-lg"
               >
                 Cancel
               </button>
 
               <button
                 onClick={handleUpdate}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
               >
                 Save
               </button>
@@ -249,14 +249,14 @@ export default function LLDPage() {
 
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 
-          <div className="bg-white rounded-xl shadow-xl p-6 w-[420px]">
+          <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-6 w-96 shadow-xl">
 
-            <h2 className="text-xl font-bold mb-3">
+            <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
               Delete Topic
             </h2>
 
-            <p className="text-gray-600 mb-6">
-              Are you sure you want to delete this topic?  
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Are you sure you want to delete this topic?
               This action cannot be undone.
             </p>
 
@@ -264,7 +264,7 @@ export default function LLDPage() {
 
               <button
                 onClick={() => setDeleteOpen(false)}
-                className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
               >
                 Cancel
               </button>

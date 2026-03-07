@@ -15,7 +15,6 @@ interface Topic {
   id: number;
   title: string;
   description?: string;
-  summary?: string;
   problems: Problem[];
 }
 
@@ -44,8 +43,7 @@ export default function DSAPage() {
 
   const [editTopicData, setEditTopicData] = useState({
     title: "",
-    description: "",
-    summary: ""
+    description: ""
   });
 
   const token = localStorage.getItem("token");
@@ -76,8 +74,7 @@ export default function DSAPage() {
 
       setEditTopicData({
         title: res.data.title || "",
-        description: res.data.description || "",
-        summary: res.data.summary || ""
+        description: res.data.description || ""
       });
 
     } catch (err) {
@@ -88,26 +85,39 @@ export default function DSAPage() {
     }
   };
 
-  const handleToggleSolved = async (problemId: number, isSolved?: number) => {
-    try {
-      if (isSolved) {
-        await axios.delete(
-          `${import.meta.env.VITE_API_URL}/api/topics/problem/${problemId}/solve`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-      } else {
-        await axios.post(
-          `${import.meta.env.VITE_API_URL}/api/topics/problem/${problemId}/solve`,
-          {},
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-      }
-
-      fetchTopic();
-    } catch (err) {
-      console.error(err);
+const handleToggleSolved = async (problemId: number, isSolved?: number) => {
+  try {
+    if (isSolved) {
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/topics/problem/${problemId}/solve`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    } else {
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/topics/problem/${problemId}/solve`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
     }
-  };
+
+    // Update UI instantly without refetch
+    setTopic((prev) => {
+      if (!prev) return prev;
+
+      return {
+        ...prev,
+        problems: prev.problems.map((p) =>
+          p.id === problemId
+            ? { ...p, isSolved: p.isSolved ? 0 : 1 }
+            : p
+        ),
+      };
+    });
+
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   const handleAddProblem = async () => {
     if (!topic) return;
@@ -197,13 +207,13 @@ export default function DSAPage() {
 
   return (
     <motion.div
-    key={topicSlug}
-    initial={{ opacity: 0, x: 20 }}
-    animate={{ opacity: 1, x: 0 }}
-    exit={{ opacity: 0, x: -20 }}
-    transition={{ duration: 0.3 }}
-    className="p-10"
-  >
+      key={topicSlug}
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      transition={{ duration: 0.3 }}
+      className="p-10"
+    >
 
       <h1 className="text-3xl font-bold mb-4 capitalize">
         {topic.title}
@@ -317,40 +327,34 @@ export default function DSAPage() {
       </div>
 
       {editMode ? (
-        <div className="mb-8 space-y-4">
-          <input
-            value={editTopicData.title}
-            onChange={(e) =>
-              setEditTopicData({ ...editTopicData, title: e.target.value })
-            }
-            className="w-full p-2 border rounded"
-          />
+  <div className="mb-8 space-y-4">
 
-          <textarea
-            value={editTopicData.description}
-            onChange={(e) =>
-              setEditTopicData({ ...editTopicData, description: e.target.value })
-            }
-            className="w-full p-2 border rounded"
-          />
+    <input
+      value={editTopicData.title}
+      onChange={(e) =>
+        setEditTopicData({ ...editTopicData, title: e.target.value })
+      }
+      className="w-full p-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded"
+    />
 
-          <textarea
-            value={editTopicData.summary}
-            onChange={(e) =>
-              setEditTopicData({ ...editTopicData, summary: e.target.value })
-            }
-            className="w-full p-2 border rounded h-40"
-          />
+    <textarea
+      value={editTopicData.description}
+      onChange={(e) =>
+        setEditTopicData({ ...editTopicData, description: e.target.value })
+      }
+      className="w-full p-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded h-40"
+    />
 
-          <button
-            onClick={handleUpdateTopic}
-            className="bg-green-600 text-white px-4 py-2 rounded"
-          >
-            Save Changes
-          </button>
-        </div>
-      ) : (
-        topic.summary && (
+    <button
+      onClick={handleUpdateTopic}
+      className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+    >
+      Save Changes
+    </button>
+
+  </div>
+) : (
+        topic.description && (
           <div className="mb-8 bg-white dark:bg-slate-800 rounded-2xl border dark:border-slate-700 shadow-sm overflow-hidden">
 
             {/* Header */}
@@ -378,7 +382,7 @@ export default function DSAPage() {
                 }`}
             >
               <div className="whitespace-pre-line text-gray-700 dark:text-gray-300">
-                {topic.summary}
+                {topic.description}
               </div>
             </div>
 
@@ -480,6 +484,7 @@ export default function DSAPage() {
 
                   <div className="flex gap-3 items-center">
                     <button
+                    type="button"
                       onClick={() =>
                         handleToggleSolved(problem.id, problem.isSolved)
                       }

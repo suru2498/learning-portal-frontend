@@ -43,9 +43,9 @@ export default function AddTopicModal({
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-xl w-96 shadow-xl">
+      <div className="bg-white dark:bg-slate-800 rounded-xl p-6 w-96 shadow-xl">
 
-        <h2 className="text-xl font-bold mb-6">Add Topic</h2>
+        <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Add Topic</h2>
 
         {/* Title */}
         <input
@@ -66,7 +66,7 @@ export default function AddTopicModal({
         />
 
         <div className="flex justify-end gap-4">
-          <button onClick={onClose}>Cancel</button>
+          <button onClick={onClose} className="bg-blue-600 text-white px-4 py-2 rounded-lg">Cancel</button>
           <button
             onClick={handleSubmit}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg"

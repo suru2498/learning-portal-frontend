@@ -59,7 +59,6 @@ export default function HLDPage() {
 
   const handleDelete = async () => {
     try {
-
       await axios.delete(
         `${import.meta.env.VITE_API_URL}/api/topics/sd/${topic.id}`,
         {
@@ -76,7 +75,8 @@ export default function HLDPage() {
     }
   };
 
-  if (!topic) return <div className="p-10">Loading...</div>;
+  if (!topic)
+    return <div className="p-10 text-gray-900 dark:text-gray-100">Loading...</div>;
 
   return (
     <div className="p-12 max-w-4xl mx-auto">
@@ -84,7 +84,9 @@ export default function HLDPage() {
       {/* Title + Buttons */}
       <div className="flex justify-between items-center mb-8">
 
-        <h1 className="text-4xl font-bold">{topic.title}</h1>
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">
+          {topic.title}
+        </h1>
 
         {role === "ADMIN" && (
           <div className="flex gap-3">
@@ -105,36 +107,39 @@ export default function HLDPage() {
 
           </div>
         )}
-
       </div>
 
       {/* Content */}
-      <div className="bg-white p-8 rounded-xl shadow-sm">
+      <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 p-8 rounded-xl shadow-sm">
+
         <div
-          className="prose max-w-none"
+          className="prose dark:prose-invert max-w-none"
           dangerouslySetInnerHTML={{
             __html: topic.description || "<p>No theory added yet.</p>",
           }}
         />
+
       </div>
 
       {/* EDIT MODAL */}
       {editOpen && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 
-          <div className="bg-white p-6 rounded-xl w-[700px]">
+          <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 p-6 rounded-xl w-[700px] shadow-xl">
 
-            <h2 className="text-xl font-bold mb-4">Edit Topic</h2>
+            <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+              Edit Topic
+            </h2>
 
             <input
-              className="w-full border rounded-lg p-2 mb-4"
+              className="w-full border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg p-2 mb-4"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
 
             <textarea
               rows={10}
-              className="w-full border rounded-lg p-2 mb-4"
+              className="w-full border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg p-2 mb-4"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -143,14 +148,14 @@ export default function HLDPage() {
 
               <button
                 onClick={() => setEditOpen(false)}
-                className="px-4 py-2 border rounded-lg"
+                className="px-4 py-2 border border-gray-300 dark:border-slate-600 text-gray-900 dark:text-gray-100 rounded-lg"
               >
                 Cancel
               </button>
 
               <button
                 onClick={handleUpdate}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
               >
                 Save
               </button>
@@ -166,12 +171,14 @@ export default function HLDPage() {
       {deleteOpen && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 
-          <div className="bg-white rounded-xl shadow-xl p-6 w-[420px]">
+          <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-6 w-96 shadow-xl">
 
-            <h2 className="text-xl font-bold mb-3">Delete Topic</h2>
+            <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
+              Delete Topic
+            </h2>
 
-            <p className="text-gray-600 mb-6">
-              Are you sure you want to delete this topic?  
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Are you sure you want to delete this topic?
               This action cannot be undone.
             </p>
 
@@ -179,7 +186,7 @@ export default function HLDPage() {
 
               <button
                 onClick={() => setDeleteOpen(false)}
-                className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
               >
                 Cancel
               </button>
