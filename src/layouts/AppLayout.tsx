@@ -8,23 +8,40 @@ import {
   Layers,
   LogOut,
   ChevronDown,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { clearLogoutTimer } from "../utils/autoLogout";
 
 export default function AppLayout() {
   const navigate = useNavigate();
   const location = useLocation();
+
   const [collapsed, setCollapsed] = useState(false);
   const [systemDesignOpen, setSystemDesignOpen] = useState(false);
+
+  // load saved theme (light by default)
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("theme") === "dark";
+  });
 
   const name = localStorage.getItem("name");
   const role = localStorage.getItem("role");
 
   useEffect(() => {
-    if (location.pathname.startsWith("/system-design")) {
-      setSystemDesignOpen(true);
-    }
+    setSystemDesignOpen(location.pathname.startsWith("/system-design"));
   }, [location.pathname]);
+
+  // Apply theme + save to localStorage
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
 
   const handleLogout = () => {
     clearLogoutTimer();
@@ -38,23 +55,28 @@ export default function AppLayout() {
   };
 
   const menuItemClass = (path: string) => `
-    flex items-center gap-3 w-full px-4 py-2 rounded-lg transition-colors duration-200
-    ${isActive(path)
-      ? "bg-blue-100 dark:bg-slate-700 text-blue-600 font-medium"
-      : "text-gray-600 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-slate-700 hover:text-blue-600"
+    flex items-center gap-3 w-full px-3 py-2.5 rounded-lg transition
+    ${
+      isActive(path)
+        ? "bg-blue-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-medium"
+        : "text-gray-600 dark:text-gray-400 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-blue-400"
     }
   `;
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-slate-900">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-slate-950">
 
       {/* Sidebar */}
       <div
-        className={`${collapsed ? "w-20" : "w-64"
-          } bg-white dark:bg-slate-900 border-r dark:border-slate-700 flex flex-col p-4 transition-all duration-300`}
+        className={`${collapsed ? "w-[72px]" : "w-[260px]"} 
+        h-screen sticky top-0 bg-white dark:bg-slate-900
+        border-r border-gray-200 dark:border-slate-700
+        flex flex-col px-3 py-6 overflow-hidden
+        transition-[width] duration-300 ease-in-out`}
       >
+
         {/* Top Section */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-6 px-3">
           {!collapsed && (
             <h2
               onClick={() => navigate("/dashboard")}
@@ -72,20 +94,24 @@ export default function AppLayout() {
           </button>
         </div>
 
-        {/* User */}
+        {/* User Section */}
         {!collapsed && (
-          <div className="mb-6">
-            <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">
-              {name}
-            </p>
+          <>
+            <div className="mb-4 px-3">
+              <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                {name}
+              </p>
 
-            <span className="text-xs px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 font-semibold">
-              {role}
-            </span>
-          </div>
+              <span className="inline-block mt-1 text-xs px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 font-semibold">
+                {role}
+              </span>
+            </div>
+
+            <div className="border-b border-gray-200 dark:border-slate-700 mb-4" />
+          </>
         )}
 
-        {/* Menu */}
+        {/* Menu Items */}
         <div className="space-y-2">
 
           {/* Dashboard */}
@@ -119,10 +145,12 @@ export default function AppLayout() {
           <div>
             <button
               onClick={() => {
-                if (!systemDesignOpen) {
+                if (location.pathname === "/system-design") {
+                  setSystemDesignOpen(!systemDesignOpen);
+                } else {
                   navigate("/system-design");
+                  setSystemDesignOpen(true);
                 }
-                setSystemDesignOpen(!systemDesignOpen);
               }}
               className={menuItemClass("/system-design")}
             >
@@ -133,18 +161,21 @@ export default function AppLayout() {
                   <span className="flex-1 text-left">
                     System Design
                   </span>
+
                   <ChevronDown
                     size={16}
-                    className={`transition-transform duration-200 ${systemDesignOpen ? "rotate-180" : ""
-                      }`}
+                    className={`transition-transform duration-200 ${
+                      systemDesignOpen ? "rotate-180" : ""
+                    }`}
                   />
                 </>
               )}
             </button>
 
-            {/* Sub Menu */}
+            {/* Submenu */}
             {systemDesignOpen && !collapsed && (
-              <div className="ml-8 mt-1 space-y-1">
+              <div className="ml-6 mt-1 space-y-1">
+
                 <button
                   onClick={() => navigate("/system-design/hld")}
                   className={menuItemClass("/system-design/hld")}
@@ -165,26 +196,42 @@ export default function AppLayout() {
                 >
                   OOPs
                 </button>
+
               </div>
             )}
           </div>
 
-          {/* Logout */}
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-3 w-full px-4 py-2 rounded-lg text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 transition"
-          >
-            <LogOut size={18} />
-            {!collapsed && "Logout"}
-          </button>
         </div>
 
+        {/* Push bottom items */}
         <div className="flex-grow" />
+
+        {/* Theme Toggle */}
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg 
+          text-gray-600 dark:text-gray-300 
+          hover:bg-blue-50 dark:hover:bg-slate-700 transition"
+        >
+          {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+          {!collapsed && (darkMode ? "Light Mode" : "Dark Mode")}
+        </button>
+
+        {/* Logout */}
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg 
+          text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 transition"
+        >
+          <LogOut size={18} />
+          {!collapsed && "Logout"}
+        </button>
+
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex justify-center transition-all duration-300">
-        <div className="w-full max-w-6xl p-10">
+      <div className="flex-1 transition-all duration-300">
+        <div className="w-full p-10">
           <Outlet />
         </div>
       </div>

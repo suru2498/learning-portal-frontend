@@ -41,7 +41,7 @@ export default function DSACategoryPage() {
 
     try {
       await axios.delete(
-        `${import.meta.env.VITE_API_URL}/api/topics/${deleteId}`,
+        `${import.meta.env.VITE_API_URL}/api/topics/dsa/${deleteId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -152,7 +152,7 @@ export default function DSACategoryPage() {
 
       {showModal && (
   <AddTopicModal
-    parentSlug="dsa"
+    categorySlug="dsa"
     onClose={() => setShowModal(false)}
     refresh={fetchTopics}
   />

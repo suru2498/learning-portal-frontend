@@ -56,7 +56,7 @@ export default function SystemDesignTopicPage() {
 
     try {
       await axios.delete(
-        `${import.meta.env.VITE_API_URL}/api/topics/${deleteId}`,
+        `${import.meta.env.VITE_API_URL}/api/topics/sd/${deleteId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

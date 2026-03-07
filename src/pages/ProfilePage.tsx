@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 interface User {
   name: string;
   email: string;
+  phone: string; // NEW
   role: string;
   created_at?: string;
 }
@@ -12,9 +13,11 @@ interface User {
 export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null);
   const [editMode, setEditMode] = useState(false);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "", // NEW
   });
 
   const token = localStorage.getItem("token");
@@ -30,9 +33,11 @@ export default function ProfilePage() {
       })
       .then((res) => {
         setUser(res.data);
+
         setFormData({
           name: res.data.name,
           email: res.data.email,
+          phone: res.data.phone || "",
         });
       })
       .catch((err) => console.error("Profile fetch error:", err));
@@ -96,7 +101,6 @@ export default function ProfilePage() {
         <div className="flex items-center justify-between mb-10">
           <div>
             <h2 className="text-xl font-semibold">{user.name}</h2>
-            <p className="text-gray-500 text-sm">{user.email}</p>
           </div>
 
           <span className="px-4 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-700">
@@ -109,8 +113,10 @@ export default function ProfilePage() {
         {/* Details Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
+          {/* Name */}
           <div>
             <p className="text-sm text-gray-500 mb-1">Full Name</p>
+
             {editMode ? (
               <input
                 type="text"
@@ -125,8 +131,10 @@ export default function ProfilePage() {
             )}
           </div>
 
+          {/* Email */}
           <div>
             <p className="text-sm text-gray-500 mb-1">Email Address</p>
+
             {editMode ? (
               <input
                 type="email"
@@ -141,11 +149,33 @@ export default function ProfilePage() {
             )}
           </div>
 
+          {/* Mobile Number */}
+          <div>
+            <p className="text-sm text-gray-500 mb-1">Mobile Number</p>
+
+            {editMode ? (
+              <input
+                type="tel"
+                value={formData.phone}
+                onChange={(e) =>
+                  setFormData({ ...formData, phone: e.target.value })
+                }
+                className="w-full p-3 border rounded-lg dark:bg-slate-900"
+              />
+            ) : (
+              <p className="font-medium">
+                {user.phone ? user.phone.replace("+91", "") : "N/A"}
+              </p>
+            )}
+          </div>
+
+          {/* Member Since */}
           <div>
             <p className="text-sm text-gray-500 mb-1">Member Since</p>
             <p className="font-medium">{memberSince}</p>
           </div>
 
+          {/* Role */}
           <div>
             <p className="text-sm text-gray-500 mb-1">Role</p>
             <p className="font-medium">{user.role}</p>

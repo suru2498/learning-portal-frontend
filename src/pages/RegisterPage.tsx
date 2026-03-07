@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");   // NEW
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -14,15 +15,28 @@ export default function Register() {
 
   const handleRegister = async () => {
 
-    if (!name.trim()) {    // validation
+    if (!name.trim()) {
       toast.error("Please enter name");
       return;
     }
-    if (!email.trim()) {    // validation
+
+    if (!email.trim()) {
       toast.error("Please enter email");
       return;
     }
-    if (!password.trim()) {    // validation
+
+    if (!mobile.trim()) {
+      toast.error("Please enter mobile number");
+      return;
+    }
+
+    // Optional better validation
+    if (!/^[6-9]\d{9}$/.test(mobile)) {
+      toast.error("Enter valid mobile number");
+      return;
+    }
+
+    if (!password.trim()) {
       toast.error("Please enter password");
       return;
     }
@@ -32,7 +46,7 @@ export default function Register() {
 
       await axios.post(
         `${import.meta.env.VITE_API_URL}/api/user/register`,
-        { name, email, password }
+        { name, email, mobile, password }   // mobile added
       );
 
       toast.success("Account created successfully 🎉");
@@ -40,12 +54,14 @@ export default function Register() {
       navigate("/");
 
     } catch (error: any) {
+
       const backendMessage =
         error?.response?.data?.message ||
         error?.response?.data ||
         "Registration failed";
 
       toast.error(backendMessage);
+
     } finally {
       setLoading(false);
     }
@@ -54,7 +70,7 @@ export default function Register() {
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-600 via-indigo-600 to-blue-800 overflow-hidden">
 
-      {/* Floating Bubbles - No Blur */}
+      {/* Floating Bubbles */}
       <div className="absolute w-40 h-40 bg-gradient-to-br from-blue-300/60 to-cyan-400/50 rounded-full top-16 left-20 animate-float shadow-xl"></div>
 
       <div className="absolute w-56 h-56 bg-gradient-to-br from-indigo-300/60 to-blue-500/50 rounded-full bottom-20 right-20 animate-floatSlow shadow-2xl"></div>
@@ -94,11 +110,25 @@ export default function Register() {
           />
         </div>
 
+        {/* Mobile Number */}
+        <div className="mb-5">
+          <label className="block text-sm mb-2 text-gray-200">
+            Mobile Number
+          </label>
+          <input
+            type="tel"
+            value={mobile}
+            onChange={(e) => setMobile(e.target.value)}
+            className="w-full p-3 rounded-xl bg-white/20 border border-white/30 focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
+          />
+        </div>
+
         {/* Password */}
         <div className="mb-8 relative">
           <label className="block text-sm mb-2 text-gray-200">
             Password
           </label>
+
           <input
             type={showPassword ? "text" : "password"}
             value={password}
@@ -112,6 +142,7 @@ export default function Register() {
           >
             {showPassword ? "Hide" : "Show"}
           </span>
+
         </div>
 
         {/* Register Button */}
@@ -120,10 +151,13 @@ export default function Register() {
           disabled={loading}
           className="w-full flex items-center justify-center gap-2 bg-white text-blue-700 font-semibold py-3 rounded-xl hover:bg-blue-100 transition duration-300 disabled:opacity-70"
         >
+
           {loading && (
             <span className="w-5 h-5 border-2 border-blue-700 border-t-transparent rounded-full animate-spin"></span>
           )}
+
           Register
+
         </button>
 
         <p className="mt-8 text-sm text-center text-gray-200">
@@ -135,6 +169,7 @@ export default function Register() {
             Sign In
           </span>
         </p>
+
       </div>
 
       {/* Animations */}

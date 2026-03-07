@@ -140,7 +140,7 @@ export default function DSAPage() {
 
     try {
       await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/topics/${topic.id}`,
+        `${import.meta.env.VITE_API_URL}/api/topics/dsa/${topic.id}`,
         editTopicData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -157,7 +157,7 @@ export default function DSAPage() {
 
     try {
       await axios.delete(
-        `${import.meta.env.VITE_API_URL}/api/topics/${topic.id}`,
+        `${import.meta.env.VITE_API_URL}/api/topics/dsa/${topic.id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
