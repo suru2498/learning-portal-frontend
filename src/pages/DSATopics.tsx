@@ -52,88 +52,106 @@ export default function DSACategoryPage() {
       setDeleteId(null);
       fetchTopics();
     } catch (err) {
-      console.error("Delete failed:", err);
+      console.error(err);
     }
   };
 
   return (
-    <div className="p-10">
+    <div className="max-w-6xl mx-auto px-6 py-10 text-gray-900 dark:text-gray-100">
 
       {/* Header */}
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">DSA Topics</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">DSA Topics</h1>
+
         {role === "ADMIN" && (
-    <button
-      onClick={() => setShowModal(true)}
-      className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition"
-    >
-      + Add Topic
-    </button>
-  )}
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition"
+          >
+            + Add
+          </button>
+        )}
       </div>
 
-      {/* Topics Grid */}
+      {/* Grid */}
       {loading ? (
-        <p>Loading...</p>
+        <p className="text-gray-500 dark:text-gray-400">Loading...</p>
       ) : (
         <motion.div
-          className="grid grid-cols-2 gap-6"
+          className="
+          grid
+          grid-cols-1
+          md:grid-cols-2
+          gap-6
+        "
           initial="hidden"
           animate="visible"
           variants={{
             hidden: {},
-            visible: {
-              transition: { staggerChildren: 0.08 },
-            },
+            visible: { transition: { staggerChildren: 0.05 } },
           }}
         >
           {topics.map((topic) => (
-            <div
+            <motion.div
               key={topic.id}
-              className="relative p-6 border rounded-xl hover:shadow-lg transition"
+              whileHover={{ scale: 1.04 }}
+              className="
+              relative
+              border
+              border-gray-200
+              dark:border-gray-700
+              rounded-xl
+              p-4
+              bg-white
+              dark:bg-gray-800
+              hover:shadow-md
+              dark:hover:shadow-lg
+              cursor-pointer
+              flex
+              items-center
+              justify-center
+              text-center
+              min-h-[70px]
+              transition
+            "
+              onClick={() => navigate(`/dsa/${topic.slug}`)}
             >
-
-              {/* Delete Button */}
               {role === "ADMIN" && (
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     setDeleteId(topic.id);
                   }}
-                  className="absolute top-3 right-3 text-red-500 hover:text-red-700 text-sm"
+                  className="absolute top-2 right-2 text-red-500 text-xs hover:scale-110 transition"
                 >
                   🗑
                 </button>
               )}
 
-              <div
-                onClick={() => navigate(`/dsa/${topic.slug}`)}
-                className="cursor-pointer"
-              >
+              <span className="text-sm font-medium leading-snug">
                 {topic.title}
-              </div>
-            </div>
+              </span>
+            </motion.div>
           ))}
         </motion.div>
       )}
 
       {/* Delete Modal */}
       {deleteId && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 w-96 shadow-xl">
-
-            <h2 className="text-xl font-semibold mb-4">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-sm shadow-lg">
+            <h2 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
               Delete Topic
             </h2>
 
-            <p className="text-gray-600 mb-6">
-              Are you sure you want to delete this topic? This action cannot be undone.
+            <p className="text-gray-600 dark:text-gray-400 text-sm mb-6">
+              Are you sure you want to delete this topic?
             </p>
 
-            <div className="flex justify-end gap-4">
+            <div className="flex justify-end gap-3">
               <button
                 onClick={() => setDeleteId(null)}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg"
+                className="px-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-white rounded-lg"
               >
                 Cancel
               </button>
@@ -145,19 +163,17 @@ export default function DSACategoryPage() {
                 Delete
               </button>
             </div>
-
           </div>
         </div>
       )}
 
       {showModal && (
-  <AddTopicModal
-    categorySlug="dsa"
-    onClose={() => setShowModal(false)}
-    refresh={fetchTopics}
-  />
-)}
-
+        <AddTopicModal
+          categorySlug="dsa"
+          onClose={() => setShowModal(false)}
+          refresh={fetchTopics}
+        />
+      )}
     </div>
   );
 }

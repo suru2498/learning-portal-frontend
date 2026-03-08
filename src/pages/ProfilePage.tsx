@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 interface User {
   name: string;
   email: string;
-  phone: string; // NEW
+  phone: string;
   role: string;
   created_at?: string;
 }
@@ -17,7 +17,7 @@ export default function ProfilePage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phone: "", // NEW
+    phone: "",
   });
 
   const token = localStorage.getItem("token");
@@ -73,13 +73,13 @@ export default function ProfilePage() {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
       transition={{ duration: 0.3 }}
-      className="w-full"
+      className="w-full max-w-3xl mx-auto py-6"
     >
       {/* Header */}
-      <div className="flex justify-between items-center mb-10">
+      <div className="flex items-start justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold">Profile</h1>
-          <p className="text-gray-500 mt-1">
+          <h1 className="text-2xl sm:text-3xl font-bold">Profile</h1>
+          <p className="text-gray-500 mt-1 text-sm sm:text-base">
             Manage your account details
           </p>
         </div>
@@ -87,7 +87,7 @@ export default function ProfilePage() {
         {!editMode && (
           <button
             onClick={() => setEditMode(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg transition shadow-sm"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition shadow-sm w-fit"
           >
             Edit Profile
           </button>
@@ -95,23 +95,21 @@ export default function ProfilePage() {
       </div>
 
       {/* Profile Card */}
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border dark:border-slate-700 p-10">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border dark:border-slate-700 p-6 sm:p-8">
 
         {/* Top Section */}
-        <div className="flex items-center justify-between mb-10">
-          <div>
-            <h2 className="text-xl font-semibold">{user.name}</h2>
-          </div>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-lg sm:text-xl font-semibold">{user.name}</h2>
 
-          <span className="px-4 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-700">
+          <span className="px-3 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-700">
             {user.role}
           </span>
         </div>
 
-        <div className="border-t dark:border-slate-700 mb-8" />
+        <div className="border-t dark:border-slate-700 mb-6" />
 
-        {/* Details Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Details */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
           {/* Name */}
           <div>
@@ -124,7 +122,7 @@ export default function ProfilePage() {
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
-                className="w-full p-3 border rounded-lg dark:bg-slate-900"
+                className="w-full p-2.5 border rounded-lg dark:bg-slate-900"
               />
             ) : (
               <p className="font-medium">{user.name}</p>
@@ -142,14 +140,14 @@ export default function ProfilePage() {
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
                 }
-                className="w-full p-3 border rounded-lg dark:bg-slate-900"
+                className="w-full p-2.5 border rounded-lg dark:bg-slate-900"
               />
             ) : (
               <p className="font-medium">{user.email}</p>
             )}
           </div>
 
-          {/* Mobile Number */}
+          {/* Mobile */}
           <div>
             <p className="text-sm text-gray-500 mb-1">Mobile Number</p>
 
@@ -160,7 +158,7 @@ export default function ProfilePage() {
                 onChange={(e) =>
                   setFormData({ ...formData, phone: e.target.value })
                 }
-                className="w-full p-3 border rounded-lg dark:bg-slate-900"
+                className="w-full p-2.5 border rounded-lg dark:bg-slate-900"
               />
             ) : (
               <p className="font-medium">
@@ -183,18 +181,19 @@ export default function ProfilePage() {
 
         </div>
 
+        {/* Buttons */}
         {editMode && (
-          <div className="flex gap-4 mt-10">
+          <div className="flex flex-wrap gap-3 mt-8">
             <button
               onClick={handleSave}
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition"
+              className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg transition"
             >
               Save Changes
             </button>
 
             <button
               onClick={() => setEditMode(false)}
-              className="bg-gray-200 dark:bg-slate-700 px-6 py-2 rounded-lg transition"
+              className="bg-gray-200 dark:bg-slate-700 px-5 py-2 rounded-lg transition"
             >
               Cancel
             </button>

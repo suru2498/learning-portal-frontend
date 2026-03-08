@@ -79,17 +79,17 @@ export default function HLDPage() {
     return <div className="p-10 text-gray-900 dark:text-gray-100">Loading...</div>;
 
   return (
-    <div className="p-12 max-w-4xl mx-auto">
+    <div className="w-full px-4 py-6 sm:px-6 lg:px-8 lg:max-w-5xl lg:mx-auto">
 
       {/* Title + Buttons */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex items-start sm:items-center gap-4 mb-6 flex-wrap">
 
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">
+        <h1 className="flex-1 text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-gray-100 leading-tight break-words">
           {topic.title}
         </h1>
 
         {role === "ADMIN" && (
-          <div className="flex gap-3">
+          <div className="flex gap-2 sm:gap-3 shrink-0 ml-auto">
 
             <button
               onClick={() => setEditOpen(true)}
@@ -110,10 +110,10 @@ export default function HLDPage() {
       </div>
 
       {/* Content */}
-      <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 p-8 rounded-xl shadow-sm">
+      <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 p-4 sm:p-6 lg:p-8 rounded-xl shadow-sm">
 
         <div
-          className="prose dark:prose-invert max-w-none"
+          className="prose dark:prose-invert max-w-none prose-sm sm:prose-base break-words"
           dangerouslySetInnerHTML={{
             __html: topic.description || "<p>No theory added yet.</p>",
           }}
@@ -125,7 +125,7 @@ export default function HLDPage() {
       {editOpen && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 
-          <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 p-6 rounded-xl w-[700px] shadow-xl">
+          <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 p-6 rounded-xl w-[95%] sm:w-[600px] lg:w-[700px] shadow-xl">
 
             <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">
               Edit Topic
@@ -171,7 +171,7 @@ export default function HLDPage() {
       {deleteOpen && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 
-          <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-6 w-96 shadow-xl">
+          <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-6 w-full max-w-sm shadow-xl">
 
             <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
               Delete Topic

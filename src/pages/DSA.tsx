@@ -85,39 +85,39 @@ export default function DSAPage() {
     }
   };
 
-const handleToggleSolved = async (problemId: number, isSolved?: number) => {
-  try {
-    if (isSolved) {
-      await axios.delete(
-        `${import.meta.env.VITE_API_URL}/api/topics/problem/${problemId}/solve`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-    } else {
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/topics/problem/${problemId}/solve`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+  const handleToggleSolved = async (problemId: number, isSolved?: number) => {
+    try {
+      if (isSolved) {
+        await axios.delete(
+          `${import.meta.env.VITE_API_URL}/api/topics/problem/${problemId}/solve`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      } else {
+        await axios.post(
+          `${import.meta.env.VITE_API_URL}/api/topics/problem/${problemId}/solve`,
+          {},
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      }
+
+      // Update UI instantly without refetch
+      setTopic((prev) => {
+        if (!prev) return prev;
+
+        return {
+          ...prev,
+          problems: prev.problems.map((p) =>
+            p.id === problemId
+              ? { ...p, isSolved: p.isSolved ? 0 : 1 }
+              : p
+          ),
+        };
+      });
+
+    } catch (err) {
+      console.error(err);
     }
-
-    // Update UI instantly without refetch
-    setTopic((prev) => {
-      if (!prev) return prev;
-
-      return {
-        ...prev,
-        problems: prev.problems.map((p) =>
-          p.id === problemId
-            ? { ...p, isSolved: p.isSolved ? 0 : 1 }
-            : p
-        ),
-      };
-    });
-
-  } catch (err) {
-    console.error(err);
-  }
-};
+  };
 
   const handleAddProblem = async () => {
     if (!topic) return;
@@ -182,8 +182,8 @@ const handleToggleSolved = async (problemId: number, isSolved?: number) => {
     }
   };
 
-  if (loading) return <div className="p-10">Loading...</div>;
-  if (!topic) return <div className="p-10">Topic not found.</div>;
+  if (loading) return <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">Loading...</div>;
+  if (!topic) return <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">Topic not found.</div>;
 
   const total = topic.problems.length;
   const solved = topic.problems.filter(p => p.isSolved).length;
@@ -212,7 +212,7 @@ const handleToggleSolved = async (problemId: number, isSolved?: number) => {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
       transition={{ duration: 0.3 }}
-      className="p-10"
+      className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6"
     >
 
       <h1 className="text-3xl font-bold mb-4 capitalize">
@@ -313,7 +313,7 @@ const handleToggleSolved = async (problemId: number, isSolved?: number) => {
           />
         </div>
 
-        <div className="mt-4 flex gap-6 text-sm">
+        <div className="mt-4 flex flex-wrap gap-4 text-sm">
           <span className="text-green-600">
             Easy: {easySolved}/{easyTotal}
           </span>
@@ -327,33 +327,33 @@ const handleToggleSolved = async (problemId: number, isSolved?: number) => {
       </div>
 
       {editMode ? (
-  <div className="mb-8 space-y-4">
+        <div className="mb-8 space-y-4">
 
-    <input
-      value={editTopicData.title}
-      onChange={(e) =>
-        setEditTopicData({ ...editTopicData, title: e.target.value })
-      }
-      className="w-full p-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded"
-    />
+          <input
+            value={editTopicData.title}
+            onChange={(e) =>
+              setEditTopicData({ ...editTopicData, title: e.target.value })
+            }
+            className="w-full p-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded"
+          />
 
-    <textarea
-      value={editTopicData.description}
-      onChange={(e) =>
-        setEditTopicData({ ...editTopicData, description: e.target.value })
-      }
-      className="w-full p-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded h-40"
-    />
+          <textarea
+            value={editTopicData.description}
+            onChange={(e) =>
+              setEditTopicData({ ...editTopicData, description: e.target.value })
+            }
+            className="w-full p-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded h-40"
+          />
 
-    <button
-      onClick={handleUpdateTopic}
-      className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
-    >
-      Save Changes
-    </button>
+          <button
+            onClick={handleUpdateTopic}
+            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+          >
+            Save Changes
+          </button>
 
-  </div>
-) : (
+        </div>
+      ) : (
         topic.description && (
           <div className="mb-8 bg-white dark:bg-slate-800 rounded-2xl border dark:border-slate-700 shadow-sm overflow-hidden">
 
@@ -474,23 +474,24 @@ const handleToggleSolved = async (problemId: number, isSolved?: number) => {
             topic.problems.map(problem => (
               <div
                 key={problem.id}
-                className={`p-5 border rounded-xl mb-4 ${problem.isSolved
-                  ? "bg-green-50 border-green-400"
-                  : "bg-white dark:bg-slate-900"
+                className={`p-5 border rounded-xl mb-4 transition
+    ${problem.isSolved
+                    ? "bg-green-50 border-green-400 dark:bg-green-900/30 dark:border-green-500"
+                    : "bg-white border-gray-200 dark:bg-slate-900 dark:border-slate-700"
                   }`}
               >
-                <div className="flex justify-between items-center mb-2">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-2">
                   <h3>{problem.title}</h3>
 
                   <div className="flex gap-3 items-center">
                     <button
-                    type="button"
+                      type="button"
                       onClick={() =>
                         handleToggleSolved(problem.id, problem.isSolved)
                       }
-                      className={`px-3 py-1 rounded text-sm ${problem.isSolved
-                        ? "bg-gray-300"
-                        : "bg-green-500 text-white"
+                      className={`px-3 py-1 rounded text-sm transition ${problem.isSolved
+                          ? "bg-gray-300 dark:bg-slate-600 text-gray-800 dark:text-gray-100"
+                          : "bg-green-500 hover:bg-green-600 text-white"
                         }`}
                     >
                       {problem.isSolved

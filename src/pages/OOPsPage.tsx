@@ -124,17 +124,17 @@ export default function OOPsPage() {
   }
 
   return (
-    <div className="p-12 max-w-4xl mx-auto">
+    <div className="w-full px-4 py-6 sm:px-6 lg:px-8 lg:max-w-5xl lg:mx-auto">
 
       {/* Title + Buttons */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex items-start sm:items-center justify-between gap-4 mb-6 flex-wrap">
 
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">
+        <h1 className="flex-1 text-lg sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-gray-100 break-words leading-tight">
           {topic.title}
         </h1>
 
         {role === "ADMIN" && (
-          <div className="flex gap-3">
+          <div className="flex gap-2 sm:gap-3 shrink-0">
 
             <button
               onClick={() => setEditOpen(true)}
@@ -156,14 +156,14 @@ export default function OOPsPage() {
       </div>
 
       {/* Theory */}
-      <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 p-8 rounded-xl shadow-sm mb-10">
+      <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 p-4 sm:p-6 lg:p-8 rounded-xl shadow-sm mb-8">
 
-        <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
+        <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
           📘 Theory
         </h2>
 
         <div
-          className="prose dark:prose-invert max-w-none"
+          className="prose dark:prose-invert max-w-none prose-sm sm:prose-base break-words"
           dangerouslySetInnerHTML={{ __html: topic.description }}
         />
 
@@ -172,13 +172,13 @@ export default function OOPsPage() {
       {/* Pseudo Code */}
       {topic.pseudo_code && topic.pseudo_code.trim().length > 0 && (
 
-        <div className="bg-gray-900 p-6 rounded-xl">
+        <div className="bg-gray-900 p-4 sm:p-6 rounded-xl overflow-x-auto">
 
-          <h2 className="text-white text-2xl font-semibold mb-4">
+          <h2 className="text-white text-lg sm:text-xl lg:text-2xl font-semibold mb-4">
             💻 Pseudo Code
           </h2>
 
-          <pre className="text-green-400 text-sm whitespace-pre overflow-x-auto">
+          <pre className="text-green-400 text-sm whitespace-pre-wrap sm:whitespace-pre overflow-x-auto">
             <code>{topic.pseudo_code}</code>
           </pre>
 
@@ -189,9 +189,9 @@ export default function OOPsPage() {
       {/* EDIT MODAL */}
       {editOpen && (
 
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
 
-          <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 p-6 rounded-xl w-[750px] shadow-xl">
+          <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 p-6 rounded-xl w-full max-w-2xl shadow-xl max-h-[90vh] overflow-y-auto">
 
             <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">
               Edit Topic
@@ -244,9 +244,9 @@ export default function OOPsPage() {
       {/* DELETE MODAL */}
       {deleteOpen && (
 
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
 
-          <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-6 w-96 shadow-xl">
+          <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-6 w-full max-w-sm shadow-xl">
 
             <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
               Delete Topic
