@@ -7,14 +7,6 @@ import { startAutoLogoutTimer } from "../utils/autoLogout";
 type LoginMode = "password" | "emailOtp" | "mobileOtp";
 type OtpStep = "send" | "verify";
 
-interface LoginResponse {
-  token: string;
-  user: {
-    role: string;
-    name: string;
-  };
-}
-
 export default function Login() {
   const navigate = useNavigate();
 

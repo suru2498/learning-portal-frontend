@@ -12,7 +12,6 @@ interface Category {
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const role = localStorage.getItem("role");
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
