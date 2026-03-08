@@ -108,7 +108,7 @@ export default function Login() {
     return toast.error("Enter valid 10 digit mobile number");
   }
 
-  const formattedPhone = `+91${cleaned}`;
+  const formattedPhone = cleaned;
 
   try {
     setLoading(true);
@@ -133,7 +133,7 @@ export default function Login() {
   if (!otp.trim()) return toast.error("Enter OTP");
 
   const cleaned = phone.replace(/\D/g, "");
-  const formattedPhone = `+91${cleaned}`;
+  const formattedPhone = cleaned;
 
   try {
     setLoading(true);

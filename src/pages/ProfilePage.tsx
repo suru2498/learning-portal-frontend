@@ -162,7 +162,7 @@ export default function ProfilePage() {
               />
             ) : (
               <p className="font-medium">
-                {user.phone ? user.phone.replace("+91", "") : "N/A"}
+                {user.phone ? user.phone: "N/A"}
               </p>
             )}
           </div>
