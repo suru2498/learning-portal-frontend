@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [mobile, setMobile] = useState("");   // NEW
+  const [phone, setPhone] = useState("");   // NEW
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -25,14 +25,14 @@ export default function Register() {
       return;
     }
 
-    if (!mobile.trim()) {
-      toast.error("Please enter mobile number");
+    if (!phone.trim()) {
+      toast.error("Please enter phone number");
       return;
     }
 
     // Optional better validation
-    if (!/^[6-9]\d{9}$/.test(mobile)) {
-      toast.error("Enter valid mobile number");
+    if (!/^[6-9]\d{9}$/.test(phone)) {
+      toast.error("Enter valid phone number");
       return;
     }
 
@@ -46,7 +46,7 @@ export default function Register() {
 
       await axios.post(
         `${import.meta.env.VITE_API_URL}/api/user/register`,
-        { name, email, mobile, password }   // mobile added
+        { name, email, phone, password }   // phone added
       );
 
       toast.success("Account created successfully 🎉");
@@ -110,15 +110,15 @@ export default function Register() {
           />
         </div>
 
-        {/* Mobile Number */}
+        {/* Phone Number */}
         <div className="mb-5">
           <label className="block text-sm mb-2 text-gray-200">
-            Mobile Number
+            Phone Number
           </label>
           <input
             type="tel"
-            value={mobile}
-            onChange={(e) => setMobile(e.target.value)}
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
             className="w-full p-3 rounded-xl bg-white/20 border border-white/30 focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
           />
         </div>
