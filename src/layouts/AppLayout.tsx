@@ -295,17 +295,20 @@ export default function AppLayout() {
             <Menu size={24} />
           </button>
 
-          <h2 className="font-bold text-blue-600">
+          <h2
+            onClick={() => navigate("/dashboard")}
+            className="font-bold text-blue-600 cursor-pointer"
+          >
             DSA Portal
           </h2>
         </div>
 
         {/* Page Content */}
         <main className="flex-1 overflow-y-auto">
-  <div className="px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto w-full">
-    <Outlet />
-  </div>
-</main>
+          <div className="px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto w-full">
+            <Outlet />
+          </div>
+        </main>
 
       </div>
 
