@@ -63,7 +63,7 @@ export default function Dashboard() {
     animate={{ opacity: 1, x: 0 }}
     exit={{ opacity: 0, x: -20 }}
     transition={{ duration: 0.3 }}
-    className="w-full max-w-[1200px] mx-auto py-6 sm:py-8"
+    className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 py-6 sm:py-8"
   >
     {/* Header */}
     <div className="text-center mb-8 sm:mb-12">
@@ -83,7 +83,7 @@ export default function Dashboard() {
         grid-cols-1
         sm:grid-cols-2
         lg:grid-cols-2
-        xl:grid-cols-3
+        xl:grid-cols-2
         gap-6 sm:gap-8
       "
       >
@@ -95,7 +95,7 @@ export default function Dashboard() {
             bg-gradient-to-br from-blue-500/40 via-purple-500/30 to-pink-500/40
             hover:scale-[1.02] transition"
           >
-            <div className="rounded-3xl bg-white dark:bg-slate-800 p-6 sm:p-8 shadow-md group-hover:shadow-xl transition flex flex-col">
+            <div className="rounded-3xl bg-white dark:bg-slate-800 p-6 sm:p-8 lg:p-10 shadow-md group-hover:shadow-xl transition flex flex-col">
 
               {/* Icon */}
               <div className="text-4xl sm:text-5xl mb-4">
