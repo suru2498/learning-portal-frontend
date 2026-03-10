@@ -127,7 +127,14 @@ export default function LLDPage() {
     <div className="w-full px-4 py-6 sm:px-6 lg:px-8 lg:max-w-5xl lg:mx-auto">
 
       {/* Title + Buttons */}
-      <div className="flex items-start sm:items-center gap-4 mb-6 flex-wrap">
+      <div className="flex items-center gap-3 mb-6 flex-wrap">
+
+        <button
+          onClick={() => navigate(-1)}
+          className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+        >
+          ←
+        </button>
 
         <h1 className="flex-1 text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-gray-100 leading-tight break-words">
           {topic.title}
