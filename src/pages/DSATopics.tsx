@@ -26,7 +26,12 @@ export default function DSACategoryPage() {
   const fetchTopics = async () => {
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/topics/dsa`
+        `${import.meta.env.VITE_API_URL}/api/topics/dsa`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
       );
       setTopics(res.data);
     } catch (err) {

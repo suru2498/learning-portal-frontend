@@ -41,7 +41,12 @@ export default function SystemDesignTopicPage() {
   const fetchChildren = async () => {
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/topics/children/${type}`
+        `${import.meta.env.VITE_API_URL}/api/topics/children/${type}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
       );
       setChildren(res.data);
     } catch (error) {

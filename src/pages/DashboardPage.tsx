@@ -29,7 +29,12 @@ export default function Dashboard() {
     try {
       setLoading(true);
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/categories`
+        `${import.meta.env.VITE_API_URL}/api/categories`,
+        {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
       );
       setCategories(res.data);
     } catch (error) {
